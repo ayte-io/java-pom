@@ -18,6 +18,14 @@
         <url>https://github.com/ayte-io</url>
     </organization>
 
+    <distributionManagement>
+        <repository>
+            <id>ayte.bintray.com</id>
+            <name>ayte.bintray.com</name>
+            <url>https://api.bintray.com/maven/ayte/default/io.ayte.far/;publish=1</url>
+        </repository>
+    </distributionManagement>
+
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>

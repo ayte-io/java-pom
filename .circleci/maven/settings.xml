@@ -5,7 +5,7 @@
 
     <servers>
         <server>
-            <id>bintray</id>
+            <id>ayte.bintray.com</id>
             <username>${env.BINTRAY_USERNAME}</username>
             <password>${env.BINTRAY_API_TOKEN}</password>
         </server>

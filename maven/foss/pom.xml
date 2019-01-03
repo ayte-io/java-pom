@@ -17,6 +17,14 @@
     <name>Ayte :: Vanity Object Model</name>
     <description>Root POM for freeware projects</description>
 
+    <distributionManagement>
+        <repository>
+            <id>ayte:bintray</id>
+            <name>ayte:bintray</name>
+            <url>https://api.bintray.com/maven/ayte/default/io.ayte:ulysses/;publish=1</url>
+        </repository>
+    </distributionManagement>
+
     <licenses>
         <license>
             <name>MIT</name>
