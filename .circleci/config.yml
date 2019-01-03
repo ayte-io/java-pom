@@ -1,0 +1,45 @@
+version: '2.1'
+orbs:
+  maven.pom:
+    commands:
+      setup:
+        steps:
+          - run:
+              command: |
+                VERSION="$(cat maven/<< parameters.target >>/VERSION)"
+                POM="maven/<< parameters.target >>/pom.xml"
+                maven/mvnw -f "$POM" versions:set -DnewVersion="$VERSION"
+      install:
+        steps:
+          - run:
+              command: maven/mvnw -f maven/<< parameters.target >>/pom.xml install
+      publish:
+        steps:
+          - run:
+              command: |
+                POM="maven/<< parameters.target >>/pom.xml"
+
+                maven/mvnw -f "$POM" -s .circleci/maven/settings.xml deploy
+jobs:
+  maven.pom.build:
+    docker:
+      - image: circleci/openjdk:11.0
+    steps:
+      - maven.pom/setup
+      - maven.pom/install:
+          target: root
+      - maven.pom/install:
+          target: proprietary
+      - maven.pom/install:
+          target: foss
+  maven.pom.publish:
+    docker:
+      - image: circleci/openjdk:11.0
+    steps:
+      - maven.pom/setup
+      - maven.pom/publish:
+          target: root
+      - maven.pom/publish:
+          target: proprietary
+      - maven.pom/publish:
+          target: foss

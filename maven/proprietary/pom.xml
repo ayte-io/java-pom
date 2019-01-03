@@ -4,19 +4,18 @@
          xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
     <modelVersion>4.0.0</modelVersion>
 
-    <groupId>io.ayte</groupId>
+    <parent>
+        <groupId>io.ayte</groupId>
+        <artifactId>far</artifactId>
+        <version>0.1.0</version>
+    </parent>
+
     <artifactId>robert</artifactId>
-    <version>0.1.0-SNAPSHOT</version>
+    <version>0.1.0</version>
     <packaging>pom</packaging>
 
     <name>Ayte :: Greed Object Model</name>
     <description>Root POM for commercial projects</description>
-    <url>https://github.com/ayte-io/metacradle</url>
-    <inceptionYear>2018</inceptionYear>
-    <organization>
-        <name>Ayte Labs</name>
-        <url>https://github.com/ayte-io</url>
-    </organization>
 
     <licenses>
         <license>
@@ -24,9 +23,4 @@
             <url>https://creativecommons.org/licenses/by-nc/4.0/</url>
         </license>
     </licenses>
-
-    <properties>
-        <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
-        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-    </properties>
 </project>
