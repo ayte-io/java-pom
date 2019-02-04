@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>io.ayte</groupId>
-        <artifactId>far</artifactId>
+        <artifactId>twill</artifactId>
         <version>0.1.0</version>
     </parent>
 
@@ -15,15 +15,7 @@
     <packaging>pom</packaging>
 
     <name>Ayte :: Vanity Object Model</name>
-    <description>Root POM for freeware projects</description>
-
-    <distributionManagement>
-        <repository>
-            <id>ayte:bintray</id>
-            <name>ayte:bintray</name>
-            <url>https://api.bintray.com/maven/ayte/default/io.ayte:ulysses/;publish=1</url>
-        </repository>
-    </distributionManagement>
+    <description>Root POM for free and open source projects</description>
 
     <licenses>
         <license>

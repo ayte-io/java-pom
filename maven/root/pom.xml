@@ -5,26 +5,57 @@
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.ayte</groupId>
-    <artifactId>far</artifactId>
+    <artifactId>twill</artifactId>
     <version>0.1.0</version>
     <packaging>pom</packaging>
 
-    <name>Ayte :: Primordial Soup Object Model</name>
-    <description>Root POM all other derive from</description>
+    <name>Ayte :: Progenitor Object Model</name>
+    <description>
+        This is the root POM all other Ayte projects rely on.
+    </description>
     <url>https://github.com/ayte-io/metacradle</url>
     <inceptionYear>2018</inceptionYear>
     <organization>
         <name>Ayte Labs</name>
-        <url>https://github.com/ayte-io</url>
+        <url>https://ayte.io</url>
     </organization>
 
     <distributionManagement>
         <repository>
-            <id>ayte.bintray.com</id>
-            <name>ayte.bintray.com</name>
-            <url>https://api.bintray.com/maven/ayte/default/io.ayte.far/;publish=1</url>
+            <id>ayte.sonatype.com</id>
+            <name>ayte.sonatype.com</name>
+            <url>https://api.bintray.com/maven/ayte/maven/io.ayte.far/;publish=1</url>
         </repository>
+        <snapshotRepository>
+            <id>ossrh</id>
+            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
+        </snapshotRepository>
     </distributionManagement>
+
+    <licenses>
+        <license>
+            <name>MIT License</name>
+            <url>https://opensource.org/licenses/MIT</url>
+        </license>
+        <license>
+            <name>The Universal Permissive License (UPL), Version 1.0</name>
+            <url>https://opensource.org/licenses/UPL</url>
+        </license>
+    </licenses>
+
+    <developers>
+        <developer>
+            <name>Etki</name>
+            <email>etki@ayte.team</email>
+            <organization>Ayte Labs</organization>
+            <organizationUrl>https://ayte.io</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/ayte-io/metacradle.git</connection>
+        <url>https://github.com/ayte-io/metacradle/tree/master/maven</url>
+    </scm>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -33,25 +64,34 @@
         <java.version.source>8</java.version.source>
         <java.version.target>8</java.version.target>
 
-        <lombok.version>1.18.4</lombok.version>
+        <maven.compiler.source>${java.version.source}</maven.compiler.source>
+        <maven.compiler.target>${java.version.target}</maven.compiler.target>
 
         <plugin.compiler.version>3.8.0</plugin.compiler.version>
         <plugin.jar.version>3.1.1</plugin.jar.version>
+        <plugin.source.version>3.0.1</plugin.source.version>
+        <plugin.javadoc.version>3.0.1</plugin.javadoc.version>
         <plugin.surefire.version>2.22.1</plugin.surefire.version>
         <plugin.failsafe.version>2.22.1</plugin.failsafe.version>
         <plugin.shade.version>3.2.1</plugin.shade.version>
         <plugin.assembly.version>3.1.0</plugin.assembly.version>
         <plugin.toolchains.version>1.1</plugin.toolchains.version>
+        <plugin.gpg.version>1.6</plugin.gpg.version>
+        <plugin.nexus-staging.version>1.6.8</plugin.nexus-staging.version>
 
+        <plugin.lombok.version>1.18.4.0</plugin.lombok.version>
         <plugin.clover.version>4.2.1</plugin.clover.version>
         <plugin.allure.version>2.9</plugin.allure.version>
 
-        <junit.jupiter.version>5.2.0</junit.jupiter.version>
+        <lombok.version>1.18.4</lombok.version>
+
+        <junit.jupiter.version>5.3.1</junit.jupiter.version>
         <junit.platform.version>1.2.0</junit.platform.version>
+        <mockito.version>2.23.4</mockito.version>
         <hamcrest.version>1.3</hamcrest.version>
         <aspectjweaver.version>1.9.2</aspectjweaver.version>
 
-        <allure.download-url>http://repo.maven.apache.org/maven2/io/qameta/allure/allure-commandline/%s/allure-commandline-%s.zip</allure.download-url>
+        <allure.version>2.8.1</allure.version>
         <allure.report.version>2.8.1</allure.report.version>
         <!--suppress UnresolvedMavenProperty -->
         <allure.install.directory>${session.executionRootDirectory}/target/allure/cli</allure.install.directory>
@@ -87,6 +127,19 @@
                 <version>${junit.jupiter.version}</version>
                 <scope>test</scope>
             </dependency>
+            <dependency>
+                <groupId>org.junit.jupiter</groupId>
+                <artifactId>junit-jupiter-api</artifactId>
+                <version>${junit.jupiter.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <dependency>
+                <groupId>org.mockito</groupId>
+                <artifactId>mockito-core</artifactId>
+                <version>${mockito.version}</version>
+                <scope>test</scope>
+            </dependency>
+            <!-- /Test Dependencies -->
         </dependencies>
     </dependencyManagement>
 
@@ -98,8 +151,6 @@
                     <artifactId>maven-compiler-plugin</artifactId>
                     <version>${plugin.compiler.version}</version>
                     <configuration>
-                        <source>${java.version.source}</source>
-                        <target>${java.version.target}</target>
                         <compilerArgs>
                             <arg>-parameters</arg>
                         </compilerArgs>
@@ -129,11 +180,6 @@
                     </configuration>
                     <dependencies>
                         <dependency>
-                            <groupId>org.junit.platform</groupId>
-                            <artifactId>junit-platform-surefire-provider</artifactId>
-                            <version>${junit.platform.version}</version>
-                        </dependency>
-                        <dependency>
                             <groupId>org.aspectj</groupId>
                             <artifactId>aspectjweaver</artifactId>
                             <version>${aspectjweaver.version}</version>
@@ -160,16 +206,60 @@
                     <artifactId>maven-toolchains-plugin</artifactId>
                     <version>${plugin.toolchains.version}</version>
                 </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-source-plugin</artifactId>
+                    <version>${plugin.source.version}</version>
+                    <executions>
+                        <execution>
+                            <id>attach-sources</id>
+                            <goals>
+                                <goal>jar-no-fork</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-javadoc-plugin</artifactId>
+                    <version>${plugin.javadoc.version}</version>
+                    <configuration>
+                        <additionalOptions>-html5</additionalOptions>
+                    </configuration>
+                    <executions>
+                        <execution>
+                            <id>attach-javadocs</id>
+                            <goals>
+                                <goal>jar</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-gpg-plugin</artifactId>
+                    <version>${plugin.gpg.version}</version>
+                    <executions>
+                        <execution>
+                            <id>sign</id>
+                            <phase>verify</phase>
+                            <goals>
+                                <goal>sign</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.projectlombok</groupId>
+                    <artifactId>lombok-maven-plugin</artifactId>
+                    <version>${plugin.lombok.version}</version>
+                </plugin>
 
                 <plugin>
                     <groupId>io.qameta.allure</groupId>
                     <artifactId>allure-maven</artifactId>
-                    <version>${allure.plugin.version}</version>
-                    <configuration>
-                        <reportVerson>${allure.report.version}</reportVerson>
-                        <reportDirectory>${allure.report.directory}</reportDirectory>
-                        <allureDownloadUrl>${allure.download-url}</allureDownloadUrl>
-                    </configuration>
+                    <version>${plugin.allure.version}</version>
 
                     <executions>
                         <execution>
@@ -184,7 +274,7 @@
                 <plugin>
                     <groupId>org.openclover</groupId>
                     <artifactId>clover-maven-plugin</artifactId>
-                    <version>${openclover.version}</version>
+                    <version>${plugin.clover.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>

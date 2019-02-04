@@ -6,7 +6,7 @@
 
     <parent>
         <groupId>io.ayte</groupId>
-        <artifactId>far</artifactId>
+        <artifactId>twill</artifactId>
         <version>0.1.0</version>
     </parent>
 
@@ -16,14 +16,6 @@
 
     <name>Ayte :: Greed Object Model</name>
     <description>Root POM for commercial projects</description>
-
-    <distributionManagement>
-        <repository>
-            <id>ayte:bintray</id>
-            <name>ayte:bintray</name>
-            <url>https://api.bintray.com/maven/ayte/default/io.ayte:robert/;publish=1</url>
-        </repository>
-    </distributionManagement>
 
     <licenses>
         <license>
