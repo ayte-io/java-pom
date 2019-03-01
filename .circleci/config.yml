@@ -102,6 +102,7 @@ workflows:
       - publish:
           requires:
             - sign
+          context: sonatype
           filters:
             branches:
               ignore: /.*/

@@ -7,7 +7,7 @@
         <server>
             <id>ayte.sonatype.com</id>
             <username>${env.SONATYPE_USERNAME}</username>
-            <password>${env.SONATYPE_API_TOKEN}</password>
+            <password>${env.SONATYPE_PASSWORD}</password>
         </server>
     </servers>
     <profiles>
