@@ -1,6 +1,10 @@
-# Metacradle
+# Maven parent POMs
 
-This repository contains all organization meta-things - like POMs,
-terms and silly jokes.
+This directory contains maven parent POMs that we are using in our 
+child projects.
 
-Currently it serves as home for parent POMs only 
+They are obviously managed with Maven, and bundled mvnw can be used to
+perform necessary actions.
+
+`VERSION` file contains current version and allows to perform deploys 
+on version change rather than on every commit.

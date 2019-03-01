@@ -24,7 +24,7 @@
         <repository>
             <id>ayte.sonatype.com</id>
             <name>ayte.sonatype.com</name>
-            <url>https://api.bintray.com/maven/ayte/maven/io.ayte.far/;publish=1</url>
+            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
         </repository>
         <snapshotRepository>
             <id>ossrh</id>
@@ -254,6 +254,12 @@
                             </goals>
                         </execution>
                     </executions>
+                    <configuration>
+                        <gpgArguments>
+                            <arg>--pinentry-mode</arg>
+                            <arg>loopback</arg>
+                        </gpgArguments>
+                    </configuration>
                 </plugin>
 
                 <plugin>

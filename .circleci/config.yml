@@ -1,45 +1,109 @@
 version: '2.1'
 orbs:
-  maven.pom:
+  maven:
     commands:
-      setup:
-        steps:
-          - run:
-              command: |
-                VERSION="$(cat maven/<< parameters.target >>/VERSION)"
-                POM="maven/<< parameters.target >>/pom.xml"
-                maven/mvnw -f "$POM" versions:set -DnewVersion="$VERSION"
       install:
+        parameters:
+          target:
+            type: string
         steps:
           - run:
-              command: maven/mvnw -f maven/<< parameters.target >>/pom.xml install
+              command: ./mvnw -Dmaven.repo.local=.m2 -f << parameters.target >>/pom.xml install
+      sign:
+        parameters:
+          target:
+            type: string
+        steps:
+          - run:
+              command: ./mvnw -Dmaven.repo.local=.m2 -s .circleci/settings.xml -f << parameters.target >>/pom.xml gpg:sign
       publish:
+        parameters:
+          target:
+            type: string
         steps:
           - run:
               command: |
-                POM="maven/<< parameters.target >>/pom.xml"
+                POM="<< parameters.target >>/pom.xml"
 
-                maven/mvnw -f "$POM" -s .circleci/maven/settings.xml deploy
+                ./mvnw -Dmaven.repo.local=.m2 -f "$POM" -s .circleci/settings.xml deploy
 jobs:
-  maven.pom.build:
+  build:
     docker:
       - image: circleci/openjdk:11.0
+    working_directory: /tmp/workspace
     steps:
-      - maven.pom/setup
-      - maven.pom/install:
+      - checkout
+      - maven/install:
           target: root
-      - maven.pom/install:
-          target: proprietary
-      - maven.pom/install:
+      - maven/install:
           target: foss
-  maven.pom.publish:
+      - maven/install:
+          target: proprietary
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths: ['*', '**/*']
+
+  sign:
     docker:
       - image: circleci/openjdk:11.0
+    working_directory: /tmp/workspace
     steps:
-      - maven.pom/setup
-      - maven.pom/publish:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: sudo apt-get update
+      - run: |
+            echo 'Package: libassuan0' | sudo tee /etc/apt/preferences.d/libassuan0
+            echo 'Pin: release n=stretch-backports' | sudo tee -a /etc/apt/preferences.d/libassuan0
+            echo 'Pin-Priority: 1000' | sudo tee -a /etc/apt/preferences.d/libassuan0
+      - run: sudo apt-get install gpg gpg-agent
+      - run: echo "$GPG_SECRET_KEY" | base64 -d > /tmp/key
+      - run: echo "$GPG_PASSPHRASE" | gpg --batch --yes --passphrase-fd 0 --import /tmp/key
+      - run: rm /tmp/key
+      - run: sudo ln -s $(which gpg) /usr/local/bin/gpg2
+      - maven/sign:
           target: root
-      - maven.pom/publish:
-          target: proprietary
-      - maven.pom/publish:
+      - maven/sign:
           target: foss
+      - maven/sign:
+          target: proprietary
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths: ['*', '**/*']
+
+  publish:
+    docker:
+      - image: circleci/openjdk:11.0
+    working_directory: /tmp/workspace
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - maven/publish:
+          target: root
+      - maven/publish:
+          target: proprietary
+      - maven/publish:
+          target: foss
+
+workflows:
+  version: '2.1'
+  default:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - sign:
+          requires:
+            - build
+          context: gpg
+          filters:
+            tags:
+              only: /.*/
+      - publish:
+          requires:
+            - sign
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/
