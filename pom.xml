@@ -6,7 +6,7 @@
 
     <groupId>io.ayte</groupId>
     <artifactId>twill</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.4</version>
     <packaging>pom</packaging>
 
     <name>Ayte :: Progenitor Object Model</name>
@@ -22,15 +22,22 @@
 
     <distributionManagement>
         <repository>
-            <id>ayte.sonatype.com</id>
-            <name>ayte.sonatype.com</name>
-            <url>https://api.bintray.com/maven/ayte/maven/io.ayte.far/;publish=1</url>
+            <id>ayte.bintray.com</id>
+            <name>ayte.bintray.com</name>
+            <url>https://api.bintray.com/maven/ayte/maven/io.ayte.twill/;publish=1</url>
         </repository>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
     </distributionManagement>
+
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>jCenter</id>
+            <name>jCenter</name>
+            <url>https://jcenter.bintray.com</url>
+        </repository>
+    </repositories>
 
     <licenses>
         <license>
@@ -56,6 +63,12 @@
         <connection>scm:git:git://github.com/ayte-io/metacradle.git</connection>
         <url>https://github.com/ayte-io/metacradle/tree/master/maven</url>
     </scm>
+
+    <modules>
+        <module>src/foss</module>
+        <module>src/proprietary</module>
+        <module>src/validator</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
@@ -254,6 +267,12 @@
                             </goals>
                         </execution>
                     </executions>
+                    <configuration>
+                        <gpgArguments>
+                            <arg>--pinentry-mode</arg>
+                            <arg>loopback</arg>
+                        </gpgArguments>
+                    </configuration>
                 </plugin>
 
                 <plugin>

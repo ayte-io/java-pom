@@ -5,12 +5,14 @@
     <parent>
         <artifactId>twill</artifactId>
         <groupId>io.ayte</groupId>
-        <version>0.1.0</version>
+        <version>0.1.4</version>
+        <relativePath>../../pom.xml</relativePath>
     </parent>
     <modelVersion>4.0.0</modelVersion>
 
     <groupId>io.ayte.twill</groupId>
     <artifactId>validator</artifactId>
+    <name>Ayte :: POM Validation Project</name>
 
     <dependencies>
         <dependency>

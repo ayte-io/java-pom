@@ -1,45 +1,68 @@
 version: '2.1'
-orbs:
-  maven.pom:
-    commands:
-      setup:
-        steps:
-          - run:
-              command: |
-                VERSION="$(cat maven/<< parameters.target >>/VERSION)"
-                POM="maven/<< parameters.target >>/pom.xml"
-                maven/mvnw -f "$POM" versions:set -DnewVersion="$VERSION"
-      install:
-        steps:
-          - run:
-              command: maven/mvnw -f maven/<< parameters.target >>/pom.xml install
-      publish:
-        steps:
-          - run:
-              command: |
-                POM="maven/<< parameters.target >>/pom.xml"
-
-                maven/mvnw -f "$POM" -s .circleci/maven/settings.xml deploy
 jobs:
-  maven.pom.build:
+  build:
     docker:
       - image: circleci/openjdk:11.0
+    working_directory: /tmp/workspace
     steps:
-      - maven.pom/setup
-      - maven.pom/install:
-          target: root
-      - maven.pom/install:
-          target: proprietary
-      - maven.pom/install:
-          target: foss
-  maven.pom.publish:
+      - checkout
+      - run: ./mvnw -s .circleci/settings.xml -Dmaven.repo.local=.m2 install
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths: ['*', '**/*']
+
+  sign:
     docker:
       - image: circleci/openjdk:11.0
+    working_directory: /tmp/workspace
     steps:
-      - maven.pom/setup
-      - maven.pom/publish:
-          target: root
-      - maven.pom/publish:
-          target: proprietary
-      - maven.pom/publish:
-          target: foss
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: sudo apt-get update
+      - run: |
+            echo 'Package: libassuan0' | sudo tee /etc/apt/preferences.d/libassuan0
+            echo 'Pin: release n=stretch-backports' | sudo tee -a /etc/apt/preferences.d/libassuan0
+            echo 'Pin-Priority: 1000' | sudo tee -a /etc/apt/preferences.d/libassuan0
+      - run: sudo apt-get install gpg gpg-agent
+      - run: echo "$GPG_SECRET_KEY" | base64 -d > /tmp/key
+      - run: echo "$GPG_PASSPHRASE" | gpg --batch --yes --passphrase-fd 0 --import /tmp/key
+      - run: rm /tmp/key
+      - run: sudo ln -s $(which gpg) /usr/local/bin/gpg2
+      - run: ./mvnw -s .circleci/settings.xml -Dmaven.repo.local=.m2 package gpg:sign
+      - persist_to_workspace:
+          root: /tmp/workspace
+          paths: ['*', '**/*']
+
+  publish:
+    docker:
+      - image: circleci/openjdk:11.0
+    working_directory: /tmp/workspace
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: ./mvnw -s .circleci/settings.xml -Dmaven.repo.local=.m2 -pl '!src/validator' deploy
+
+workflows:
+  version: '2.1'
+  default:
+    jobs:
+      - build:
+          filters:
+            tags:
+              only: /.*/
+      - sign:
+          requires:
+            - build
+          context: gpg
+          filters:
+            tags:
+              only: /.*/
+      - publish:
+          requires:
+            - sign
+          context: bintray.com
+          filters:
+            branches:
+              ignore: /.*/
+            tags:
+              only: /.*/

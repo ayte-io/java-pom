@@ -4,3 +4,5 @@
 
 # Maven Artifacts
 target
+*.jar
+*.versionsBackup
