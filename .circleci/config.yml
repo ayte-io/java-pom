@@ -1,31 +1,4 @@
 version: '2.1'
-orbs:
-  maven:
-    commands:
-      install:
-        parameters:
-          target:
-            type: string
-        steps:
-          - run:
-              command: ./mvnw -Dmaven.repo.local=.m2 install
-      sign:
-        parameters:
-          target:
-            type: string
-        steps:
-          - run:
-              command: ./mvnw -Dmaven.repo.local=.m2 -s .circleci/settings.xml -f << parameters.target >>/pom.xml gpg:sign
-      publish:
-        parameters:
-          target:
-            type: string
-        steps:
-          - run:
-              command: |
-                POM="<< parameters.target >>/pom.xml"
-
-                ./mvnw -Dmaven.repo.local=.m2 -f "$POM" -s .circleci/settings.xml deploy
 jobs:
   build:
     docker:
@@ -33,7 +6,7 @@ jobs:
     working_directory: /tmp/workspace
     steps:
       - checkout
-      - run: ./mvnw -Dmaven.repo.local=.m2 install
+      - run: ./mvnw -s .circleci/settings.xml -Dmaven.repo.local=.m2 install
       - persist_to_workspace:
           root: /tmp/workspace
           paths: ['*', '**/*']
@@ -55,7 +28,7 @@ jobs:
       - run: echo "$GPG_PASSPHRASE" | gpg --batch --yes --passphrase-fd 0 --import /tmp/key
       - run: rm /tmp/key
       - run: sudo ln -s $(which gpg) /usr/local/bin/gpg2
-      - run: ./mvnw -Dmaven.repo.local=.m2 gpg:sign
+      - run: ./mvnw -s .circleci/settings.xml -Dmaven.repo.local=.m2 package gpg:sign
       - persist_to_workspace:
           root: /tmp/workspace
           paths: ['*', '**/*']
@@ -67,7 +40,7 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - run: ./mvnw -Dmaven.repo.local=.m2 -pl '!src/validator' deploy
+      - run: ./mvnw -s .circleci/settings.xml -Dmaven.repo.local=.m2 -pl '!src/validator' deploy
 
 workflows:
   version: '2.1'
@@ -87,7 +60,7 @@ workflows:
       - publish:
           requires:
             - sign
-          context: sonatype
+          context: bintray.com
           filters:
             branches:
               ignore: /.*/
