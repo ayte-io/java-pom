@@ -8,7 +8,7 @@ orbs:
             type: string
         steps:
           - run:
-              command: ./mvnw -Dmaven.repo.local=.m2 -f << parameters.target >>/pom.xml install
+              command: ./mvnw -Dmaven.repo.local=.m2 install
       sign:
         parameters:
           target:
@@ -33,12 +33,7 @@ jobs:
     working_directory: /tmp/workspace
     steps:
       - checkout
-      - maven/install:
-          target: root
-      - maven/install:
-          target: foss
-      - maven/install:
-          target: proprietary
+      - run: ./mvnw -Dmaven.repo.local=.m2 install
       - persist_to_workspace:
           root: /tmp/workspace
           paths: ['*', '**/*']
@@ -60,12 +55,7 @@ jobs:
       - run: echo "$GPG_PASSPHRASE" | gpg --batch --yes --passphrase-fd 0 --import /tmp/key
       - run: rm /tmp/key
       - run: sudo ln -s $(which gpg) /usr/local/bin/gpg2
-      - maven/sign:
-          target: root
-      - maven/sign:
-          target: foss
-      - maven/sign:
-          target: proprietary
+      - run: ./mvnw -Dmaven.repo.local=.m2 gpg:sign
       - persist_to_workspace:
           root: /tmp/workspace
           paths: ['*', '**/*']
@@ -77,12 +67,7 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - maven/publish:
-          target: root
-      - maven/publish:
-          target: proprietary
-      - maven/publish:
-          target: foss
+      - run: ./mvnw -Dmaven.repo.local=.m2 -pl '!src/validator' deploy
 
 workflows:
   version: '2.1'

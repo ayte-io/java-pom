@@ -7,11 +7,11 @@
     <parent>
         <groupId>io.ayte</groupId>
         <artifactId>twill</artifactId>
-        <version>0.1.0</version>
+        <version>0.1.2</version>
     </parent>
 
     <artifactId>ulysses</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.2</version>
     <packaging>pom</packaging>
 
     <name>Ayte :: Vanity Object Model</name>
@@ -27,4 +27,12 @@
             <url>https://opensource.org/licenses/UPL</url>
         </license>
     </licenses>
+
+    <distributionManagement>
+        <repository>
+            <id>ayte.bintray.com</id>
+            <name>ayte.bintray.com</name>
+            <url>https://api.bintray.com/maven/ayte/maven/io.ayte.ulysses/;publish=1</url>
+        </repository>
+    </distributionManagement>
 </project>

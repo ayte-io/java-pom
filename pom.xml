@@ -6,7 +6,7 @@
 
     <groupId>io.ayte</groupId>
     <artifactId>twill</artifactId>
-    <version>0.1.1</version>
+    <version>0.1.2</version>
     <packaging>pom</packaging>
 
     <name>Ayte :: Progenitor Object Model</name>
@@ -63,6 +63,12 @@
         <connection>scm:git:git://github.com/ayte-io/metacradle.git</connection>
         <url>https://github.com/ayte-io/metacradle/tree/master/maven</url>
     </scm>
+
+    <modules>
+        <module>src/foss</module>
+        <module>src/proprietary</module>
+        <module>src/validator</module>
+    </modules>
 
     <properties>
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
