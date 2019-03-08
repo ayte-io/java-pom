@@ -6,7 +6,7 @@
 
     <groupId>io.ayte</groupId>
     <artifactId>twill</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
     <packaging>pom</packaging>
 
     <name>Ayte :: Progenitor Object Model</name>
@@ -60,8 +60,8 @@
     </developers>
 
     <scm>
-        <connection>scm:git:git://github.com/ayte-io/metacradle.git</connection>
-        <url>https://github.com/ayte-io/metacradle/tree/master/maven</url>
+        <connection>scm:git:git://github.com/ayte-io/java-pom.git</connection>
+        <url>https://github.com/ayte-io/java-pom</url>
     </scm>
 
     <modules>

@@ -7,12 +7,12 @@
     <parent>
         <groupId>io.ayte</groupId>
         <artifactId>twill</artifactId>
-        <version>0.1.4</version>
+        <version>0.1.5</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>ulysses</artifactId>
-    <version>0.1.4</version>
+    <version>0.1.5</version>
     <packaging>pom</packaging>
 
     <name>Ayte :: Vanity Object Model</name>
@@ -28,6 +28,20 @@
             <url>https://opensource.org/licenses/UPL</url>
         </license>
     </licenses>
+
+    <developers>
+        <developer>
+            <name>Etki</name>
+            <email>etki@ayte.team</email>
+            <organization>Ayte Labs</organization>
+            <organizationUrl>https://ayte.io</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/ayte-io/java-pom.git</connection>
+        <url>https://github.com/ayte-io/java-pom/tree/master/src/ulysses</url>
+    </scm>
 
     <distributionManagement>
         <repository>

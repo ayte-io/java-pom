@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.ayte</groupId>
         <artifactId>twill</artifactId>
-        <version>0.1.4</version>
+        <version>0.1.5</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -31,4 +31,18 @@
             <url>https://api.bintray.com/maven/ayte/maven/io.ayte.robert/;publish=1</url>
         </repository>
     </distributionManagement>
+
+    <developers>
+        <developer>
+            <name>Etki</name>
+            <email>etki@ayte.team</email>
+            <organization>Ayte Labs</organization>
+            <organizationUrl>https://ayte.io</organizationUrl>
+        </developer>
+    </developers>
+
+    <scm>
+        <connection>scm:git:git://github.com/ayte-io/java-pom.git</connection>
+        <url>https://github.com/ayte-io/java-pom/tree/master/src/ulysses</url>
+    </scm>
 </project>
