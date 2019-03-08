@@ -6,7 +6,7 @@
 
     <groupId>io.ayte</groupId>
     <artifactId>twill</artifactId>
-    <version>0.1.0</version>
+    <version>0.1.1</version>
     <packaging>pom</packaging>
 
     <name>Ayte :: Progenitor Object Model</name>
@@ -22,15 +22,22 @@
 
     <distributionManagement>
         <repository>
-            <id>ayte.sonatype.com</id>
-            <name>ayte.sonatype.com</name>
-            <url>https://oss.sonatype.org/service/local/staging/deploy/maven2/</url>
+            <id>ayte.bintray.com</id>
+            <name>ayte.bintray.com</name>
+            <url>https://api.bintray.com/maven/ayte/maven/io.ayte.twill/;publish=1</url>
         </repository>
-        <snapshotRepository>
-            <id>ossrh</id>
-            <url>https://oss.sonatype.org/content/repositories/snapshots</url>
-        </snapshotRepository>
     </distributionManagement>
+
+    <repositories>
+        <repository>
+            <snapshots>
+                <enabled>false</enabled>
+            </snapshots>
+            <id>jCenter</id>
+            <name>jCenter</name>
+            <url>https://jcenter.bintray.com</url>
+        </repository>
+    </repositories>
 
     <licenses>
         <license>
