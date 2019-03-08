@@ -6,7 +6,7 @@
 
     <groupId>io.ayte</groupId>
     <artifactId>twill</artifactId>
-    <version>0.1.6</version>
+    <version>0.1.7</version>
     <packaging>pom</packaging>
 
     <name>Ayte :: Progenitor Object Model</name>
@@ -96,6 +96,7 @@
         <plugin.lombok.version>1.18.4.0</plugin.lombok.version>
         <plugin.clover.version>4.2.1</plugin.clover.version>
         <plugin.allure.version>2.9</plugin.allure.version>
+        <plugin.sonar-scanner.version>3.6.0.1398</plugin.sonar-scanner.version>
 
         <lombok.version>1.18.4</lombok.version>
 
@@ -111,6 +112,13 @@
         <allure.install.directory>${session.executionRootDirectory}/target/allure/cli</allure.install.directory>
         <!--suppress UnresolvedMavenProperty -->
         <allure.results.directory>${session.executionRootDirectory}/target/allure/results</allure.results.directory>
+
+        <sonar.organization>ayte</sonar.organization>
+        <sonar.host.url>https://sonarcloud.io</sonar.host.url>
+        <!--suppress UnresolvedMavenProperty -->
+        <sonar.projectKey>ayte-io_${env.SONAR_PROJECT_ID}</sonar.projectKey>
+        <!--suppress UnresolvedMavenProperty -->
+        <sonar.login>${env.SONAR_API_TOKEN}</sonar.login>
     </properties>
 
     <dependencyManagement>
@@ -300,6 +308,12 @@
                     <groupId>org.openclover</groupId>
                     <artifactId>clover-maven-plugin</artifactId>
                     <version>${plugin.clover.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.sonarsource.scanner.maven</groupId>
+                    <artifactId>sonar-maven-plugin</artifactId>
+                    <version>${plugin.sonar-scanner.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
