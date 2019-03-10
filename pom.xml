@@ -6,7 +6,7 @@
 
     <groupId>io.ayte</groupId>
     <artifactId>twill</artifactId>
-    <version>0.1.9</version>
+    <version>0.1.10</version>
     <packaging>pom</packaging>
 
     <name>Ayte :: Progenitor Object Model</name>
@@ -113,12 +113,12 @@
         <!--suppress UnresolvedMavenProperty -->
         <allure.results.directory>${session.executionRootDirectory}/target/allure/results</allure.results.directory>
         <!--suppress UnresolvedMavenProperty -->
-        <allure.report.directory>${session.executionRootDirectory}/target/allure/report</allure.report.directory>
+        <allure.report.directory>${session.executionRootDirectory}/target/site/allure</allure.report.directory>
 
         <sonar.organization>ayte</sonar.organization>
         <sonar.host.url>https://sonarcloud.io</sonar.host.url>
         <!--suppress UnresolvedMavenProperty -->
-        <sonar.projectKey>ayte-io_${env.SONAR_PROJECT_ID}</sonar.projectKey>
+        <sonar.projectKey>${project.groupId}:${project.artifactId}</sonar.projectKey>
         <!--suppress UnresolvedMavenProperty -->
         <sonar.login>${env.SONAR_API_TOKEN}</sonar.login>
     </properties>
