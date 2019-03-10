@@ -10,25 +10,14 @@ jobs:
       - persist_to_workspace:
           root: /tmp/workspace
           paths: ['*', '**/*']
-
-  sign:
+  validate-allure:
     docker:
-      - image: circleci/openjdk:11.0
+      - image: circleci/openjdk:8
     working_directory: /tmp/workspace
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - run: sudo apt-get update
-      - run: |
-            echo 'Package: libassuan0' | sudo tee /etc/apt/preferences.d/libassuan0
-            echo 'Pin: release n=stretch-backports' | sudo tee -a /etc/apt/preferences.d/libassuan0
-            echo 'Pin-Priority: 1000' | sudo tee -a /etc/apt/preferences.d/libassuan0
-      - run: sudo apt-get install gpg gpg-agent
-      - run: echo "$GPG_SECRET_KEY" | base64 -d > /tmp/key
-      - run: echo "$GPG_PASSPHRASE" | gpg --batch --yes --passphrase-fd 0 --import /tmp/key
-      - run: rm /tmp/key
-      - run: sudo ln -s $(which gpg) /usr/local/bin/gpg2
-      - run: ./mvnw -s .circleci/settings.xml -Dmaven.repo.local=.m2 package gpg:sign
+      - run: ./mvnw -s .circleci/settings.xml -Dmaven.repo.local=.m2 allure:report
       - persist_to_workspace:
           root: /tmp/workspace
           paths: ['*', '**/*']
@@ -61,9 +50,16 @@ workflows:
           filters:
             tags:
               only: /.*/
+      - validate-allure:
+          requires:
+            - build
+          filters:
+            tags:
+              only: /.*/
       - publish:
           requires:
             - build
+            - validate-allure
           context: bintray.com
           filters:
             branches:
