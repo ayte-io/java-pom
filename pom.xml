@@ -6,7 +6,7 @@
 
     <groupId>io.ayte</groupId>
     <artifactId>twill</artifactId>
-    <version>0.1.10</version>
+    <version>0.1.11</version>
     <packaging>pom</packaging>
 
     <name>Ayte :: Progenitor Object Model</name>
@@ -74,8 +74,8 @@
         <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
 
-        <java.version.source>8</java.version.source>
-        <java.version.target>8</java.version.target>
+        <java.version.source>1.8</java.version.source>
+        <java.version.target>1.8</java.version.target>
 
         <maven.compiler.source>${java.version.source}</maven.compiler.source>
         <maven.compiler.target>${java.version.target}</maven.compiler.target>
@@ -95,8 +95,14 @@
 
         <plugin.lombok.version>1.18.4.0</plugin.lombok.version>
         <plugin.clover.version>4.2.1</plugin.clover.version>
+        <plugin.jacoco.version>0.8.3</plugin.jacoco.version>
+        <plugin.checkstyle.version>3.0.0</plugin.checkstyle.version>
+        <plugin.pmd.version>3.11.0</plugin.pmd.version>
+        <plugin.spotbugs.version>3.1.11</plugin.spotbugs.version>
         <plugin.allure.version>2.9</plugin.allure.version>
         <plugin.sonar-scanner.version>3.6.0.1398</plugin.sonar-scanner.version>
+
+        <plugin.jxr.version>3.0.0</plugin.jxr.version>
 
         <lombok.version>1.18.4</lombok.version>
 
@@ -319,6 +325,52 @@
                 </plugin>
 
                 <plugin>
+                    <groupId>org.jacoco</groupId>
+                    <artifactId>jacoco-maven-plugin</artifactId>
+                    <version>${plugin.jacoco.version}</version>
+
+                    <executions>
+                        <execution>
+                            <goals>
+                                <goal>prepare-agent</goal>
+                            </goals>
+                        </execution>
+                        <execution>
+                            <id>report</id>
+                            <phase>site</phase>
+                            <goals>
+                                <goal>report-aggregate</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-pmd-plugin</artifactId>
+                    <version>${plugin.pmd.version}</version>
+                    <configuration>
+                        <targetJdk>${java.version.source}</targetJdk>
+                    </configuration>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.apache.maven.plugins</groupId>
+                    <artifactId>maven-checkstyle-plugin</artifactId>
+                    <version>${plugin.checkstyle.version}</version>
+                </plugin>
+
+                <plugin>
+                    <groupId>com.github.spotbugs</groupId>
+                    <artifactId>spotbugs-maven-plugin</artifactId>
+                    <version>${plugin.spotbugs.version}</version>
+                    <configuration>
+                        <xmlOutput>true</xmlOutput>
+                        <xmlOutputDirectory>${project.build.directory}/site/spotbugs</xmlOutputDirectory>
+                    </configuration>
+                </plugin>
+
+                <plugin>
                     <groupId>org.sonarsource.scanner.maven</groupId>
                     <artifactId>sonar-maven-plugin</artifactId>
                     <version>${plugin.sonar-scanner.version}</version>
@@ -326,4 +378,14 @@
             </plugins>
         </pluginManagement>
     </build>
+
+    <reporting>
+        <plugins>
+            <plugin>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-jxr-plugin</artifactId>
+                <version>${plugin.jxr.version}</version>
+            </plugin>
+        </plugins>
+    </reporting>
 </project>
