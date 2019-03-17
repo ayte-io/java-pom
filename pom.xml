@@ -6,7 +6,7 @@
 
     <groupId>io.ayte</groupId>
     <artifactId>twill</artifactId>
-    <version>0.2.2</version>
+    <version>0.2.3</version>
     <packaging>pom</packaging>
 
     <name>Ayte :: Progenitor Object Model</name>
@@ -83,6 +83,8 @@
         <maven.compiler.source>${java.version.source}</maven.compiler.source>
         <maven.compiler.target>${java.version.target}</maven.compiler.target>
 
+        <git.branch>master</git.branch>
+
         <plugin.compiler.version>3.8.0</plugin.compiler.version>
         <plugin.jar.version>3.1.1</plugin.jar.version>
         <plugin.source.version>3.0.1</plugin.source.version>
@@ -104,6 +106,7 @@
         <plugin.spotbugs.version>3.1.11</plugin.spotbugs.version>
         <plugin.allure.version>2.9</plugin.allure.version>
         <plugin.sonar-scanner.version>3.6.0.1398</plugin.sonar-scanner.version>
+        <plugin.git-commit-id.version>2.2.6</plugin.git-commit-id.version>
 
         <plugin.jxr.version>3.0.0</plugin.jxr.version>
 
@@ -131,8 +134,9 @@
         <sonar.projectKey>${project.groupId}:${project.artifactId}</sonar.projectKey>
         <!--suppress UnresolvedMavenProperty -->
         <sonar.login>${env.SONAR_API_TOKEN}</sonar.login>
+        <sonar.branch.name>${git.branch}</sonar.branch.name>
 
-        <packaging.module-name>${project.groupId}.${project.artifactId}</packaging.module-name>
+        <packaging.automatic-module-name>${project.groupId}.${project.artifactId}</packaging.automatic-module-name>
     </properties>
 
     <dependencyManagement>
@@ -392,6 +396,20 @@
                     <artifactId>sonar-maven-plugin</artifactId>
                     <version>${plugin.sonar-scanner.version}</version>
                 </plugin>
+
+                <plugin>
+                    <groupId>pl.project13.maven</groupId>
+                    <artifactId>git-commit-id-plugin</artifactId>
+                    <version>${plugin.git-commit-id.version}</version>
+                    <executions>
+                        <execution>
+                            <id>execute</id>
+                            <goals>
+                                <goal>revision</goal>
+                            </goals>
+                        </execution>
+                    </executions>
+                </plugin>
             </plugins>
         </pluginManagement>
     </build>
@@ -420,34 +438,6 @@
                         <artifactId>maven-source-plugin</artifactId>
                     </plugin>
                 </plugins>
-            </build>
-        </profile>
-
-        <profile>
-            <id>packaging.automatic-module-name</id>
-            <activation>
-                <property>
-                    <name>packaging.automatic-module-name</name>
-                </property>
-            </activation>
-            <build>
-                <pluginManagement>
-                    <plugins>
-                        <plugin>
-                            <groupId>org.apache.maven.plugins</groupId>
-                            <artifactId>maven-jar-plugin</artifactId>
-                            <version>${plugin.jar.version}</version>
-                            <configuration>
-                                <archive>
-                                    <manifestEntries>
-                                        <!--suppress MavenModelInspection -->
-                                        <Automatic-Module-Name>${packaging.automatic-module-name}</Automatic-Module-Name>
-                                    </manifestEntries>
-                                </archive>
-                            </configuration>
-                        </plugin>
-                    </plugins>
-                </pluginManagement>
             </build>
         </profile>
     </profiles>
