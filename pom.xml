@@ -6,7 +6,7 @@
 
     <groupId>io.ayte</groupId>
     <artifactId>twill</artifactId>
-    <version>0.2.1</version>
+    <version>0.2.2</version>
     <packaging>pom</packaging>
 
     <name>Ayte :: Progenitor Object Model</name>
@@ -441,7 +441,7 @@
                                 <archive>
                                     <manifestEntries>
                                         <!--suppress MavenModelInspection -->
-                                        <Automatic-Module-Name>${packaging.module-name}</Automatic-Module-Name>
+                                        <Automatic-Module-Name>${packaging.automatic-module-name}</Automatic-Module-Name>
                                     </manifestEntries>
                                 </archive>
                             </configuration>

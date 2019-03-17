@@ -4,7 +4,17 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.1] - 17-03-2019
+## [0.2.2] - 17-03-2019
+### Fixed
+
+- Invalid jar plugin property in `packaging.automatic-module-name` 
+profile
+
+## [0.2.1] - 17-03-2019 - YANKED
+
+Yanked because jar plugin configuration used `packaging.module-name` 
+property (instead of `packaging.automatic-module-name`).
+
 ### Added
 
 - `release` profile with javadoc and sources jar plugins enabled
