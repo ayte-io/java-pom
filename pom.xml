@@ -6,7 +6,7 @@
 
     <groupId>io.ayte</groupId>
     <artifactId>twill</artifactId>
-    <version>0.2.0</version>
+    <version>0.2.1</version>
     <packaging>pom</packaging>
 
     <name>Ayte :: Progenitor Object Model</name>
@@ -131,6 +131,8 @@
         <sonar.projectKey>${project.groupId}:${project.artifactId}</sonar.projectKey>
         <!--suppress UnresolvedMavenProperty -->
         <sonar.login>${env.SONAR_API_TOKEN}</sonar.login>
+
+        <packaging.module-name>${project.groupId}.${project.artifactId}</packaging.module-name>
     </properties>
 
     <dependencyManagement>
@@ -403,4 +405,50 @@
             </plugin>
         </plugins>
     </reporting>
+
+    <profiles>
+        <profile>
+            <id>release</id>
+            <build>
+                <plugins>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-javadoc-plugin</artifactId>
+                    </plugin>
+                    <plugin>
+                        <groupId>org.apache.maven.plugins</groupId>
+                        <artifactId>maven-source-plugin</artifactId>
+                    </plugin>
+                </plugins>
+            </build>
+        </profile>
+
+        <profile>
+            <id>packaging.automatic-module-name</id>
+            <activation>
+                <property>
+                    <name>packaging.automatic-module-name</name>
+                </property>
+            </activation>
+            <build>
+                <pluginManagement>
+                    <plugins>
+                        <plugin>
+                            <groupId>org.apache.maven.plugins</groupId>
+                            <artifactId>maven-jar-plugin</artifactId>
+                            <version>${plugin.jar.version}</version>
+                            <configuration>
+                                <archive>
+                                    <manifestEntries>
+                                        <!--suppress MavenModelInspection -->
+                                        <Automatic-Module-Name>${packaging.module-name}</Automatic-Module-Name>
+                                    </manifestEntries>
+                                </archive>
+                            </configuration>
+                        </plugin>
+                    </plugins>
+                </pluginManagement>
+            </build>
+        </profile>
+    </profiles>
 </project>
