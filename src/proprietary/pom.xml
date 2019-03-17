@@ -7,7 +7,7 @@
     <parent>
         <groupId>io.ayte</groupId>
         <artifactId>twill</artifactId>
-        <version>0.1.11</version>
+        <version>0.2.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
@@ -23,14 +23,6 @@
             <url>https://creativecommons.org/licenses/by-nc/4.0/</url>
         </license>
     </licenses>
-
-    <distributionManagement>
-        <repository>
-            <id>ayte.bintray.com</id>
-            <name>ayte.bintray.com</name>
-            <url>https://api.bintray.com/maven/ayte/maven/io.ayte.robert/;publish=1</url>
-        </repository>
-    </distributionManagement>
 
     <developers>
         <developer>

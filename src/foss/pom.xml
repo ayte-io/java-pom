@@ -7,12 +7,12 @@
     <parent>
         <groupId>io.ayte</groupId>
         <artifactId>twill</artifactId>
-        <version>0.1.11</version>
+        <version>0.2.0</version>
         <relativePath>../../pom.xml</relativePath>
     </parent>
 
     <artifactId>ulysses</artifactId>
-    <version>0.1.11</version>
+    <version>0.2.0</version>
     <packaging>pom</packaging>
 
     <name>Ayte :: Vanity Object Model</name>
@@ -42,12 +42,4 @@
         <connection>scm:git:git://github.com/ayte-io/java-pom.git</connection>
         <url>https://github.com/ayte-io/java-pom/tree/master/src/ulysses</url>
     </scm>
-
-    <distributionManagement>
-        <repository>
-            <id>ayte.bintray.com</id>
-            <name>ayte.bintray.com</name>
-            <url>https://api.bintray.com/maven/ayte/maven/io.ayte.ulysses/;publish=1</url>
-        </repository>
-    </distributionManagement>
 </project>

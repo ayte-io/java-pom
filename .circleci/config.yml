@@ -1,4 +1,6 @@
 version: '2.1'
+orbs:
+  mvnw: ayte/mvnw@0.1.0
 jobs:
   build:
     docker:
@@ -6,7 +8,8 @@ jobs:
     working_directory: /tmp/workspace
     steps:
       - checkout
-      - run: ./mvnw -s .circleci/settings.xml -Dmaven.repo.local=.m2 install
+      - mvnw/circle:
+          command: install
       - persist_to_workspace:
           root: /tmp/workspace
           paths: ['*', '**/*']
@@ -17,19 +20,18 @@ jobs:
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - run: ./mvnw -s .circleci/settings.xml -Dmaven.repo.local=.m2 allure:report
+      - mvnw/circle:
+          command: allure:report
       - persist_to_workspace:
           root: /tmp/workspace
           paths: ['*', '**/*']
-
-  publish:
+  publish-staging:
     docker:
       - image: circleci/openjdk:11.0
     working_directory: /tmp/workspace
     steps:
       - attach_workspace:
           at: /tmp/workspace
-      - run: sudo apt-get update
       - run: |
           echo 'Package: libassuan0' | sudo tee /etc/apt/preferences.d/libassuan0
           echo 'Pin: release n=stretch-backports' | sudo tee -a /etc/apt/preferences.d/libassuan0
@@ -39,8 +41,26 @@ jobs:
       - run: echo "$GPG_PASSPHRASE" | gpg --batch --yes --passphrase-fd 0 --import /tmp/key
       - run: rm /tmp/key
       - run: sudo ln -s $(which gpg) /usr/local/bin/gpg2
-      - run: ./mvnw -s .circleci/settings.xml -Dmaven.repo.local=.m2 package gpg:sign
-      - run: ./mvnw -s .circleci/settings.xml -Dmaven.repo.local=.m2 -pl '!src/validator' gpg:sign deploy
+      - mvnw/circle:
+          command: -pl '!src/validator' package gpg:sign nexus-staging:deploy
+  release:
+    docker:
+      - image: circleci/openjdk:11.0
+    working_directory: /tmp/workspace
+    steps:
+      - attach_workspace:
+          at: /tmp/workspace
+      - run: |
+          echo 'Package: libassuan0' | sudo tee /etc/apt/preferences.d/libassuan0
+          echo 'Pin: release n=stretch-backports' | sudo tee -a /etc/apt/preferences.d/libassuan0
+          echo 'Pin-Priority: 1000' | sudo tee -a /etc/apt/preferences.d/libassuan0
+      - run: sudo apt-get install gpg gpg-agent
+      - run: echo "$GPG_SECRET_KEY" | base64 -d > /tmp/key
+      - run: echo "$GPG_PASSPHRASE" | gpg --batch --yes --passphrase-fd 0 --import /tmp/key
+      - run: rm /tmp/key
+      - run: sudo ln -s $(which gpg) /usr/local/bin/gpg2
+      - mvnw/circle:
+          command: -pl '!src/validator' package gpg:sign nexus-staging:deploy nexus-staging:release
 
 workflows:
   version: '2.1'
@@ -56,11 +76,18 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - publish:
+      - publish-staging:
           requires:
             - build
             - validate-allure
-          context: bintray.com
+          context: sonatype.org
+          filters:
+            tags:
+              only: /.*/
+      - release:
+          requires:
+            - publish-staging
+          context: sonatype.org
           filters:
             branches:
               ignore: /.*/
