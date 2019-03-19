@@ -6,7 +6,7 @@
 
     <groupId>io.ayte</groupId>
     <artifactId>twill</artifactId>
-    <version>0.2.3</version>
+    <version>0.2.4</version>
     <packaging>pom</packaging>
 
     <name>Ayte :: Progenitor Object Model</name>
@@ -134,7 +134,6 @@
         <sonar.projectKey>${project.groupId}:${project.artifactId}</sonar.projectKey>
         <!--suppress UnresolvedMavenProperty -->
         <sonar.login>${env.SONAR_API_TOKEN}</sonar.login>
-        <sonar.branch.name>${git.branch}</sonar.branch.name>
 
         <packaging.automatic-module-name>${project.groupId}.${project.artifactId}</packaging.automatic-module-name>
     </properties>

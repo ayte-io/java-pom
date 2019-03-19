@@ -4,7 +4,16 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
-## [0.2.3] - 17-03-2019
+## [0.2.4] - 19-03-2019
+### Changed
+
+Removed sonar analysis branch property, reverting 0.2.3
+
+## [0.2.3] - 17-03-2019 - YANKED
+
+Yanked since a) it didn't work and b) prevented sonar from doing initial
+analysis
+
 ### Added
 
 - Git branch property to sonar analysis configuration
