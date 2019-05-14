@@ -9,7 +9,7 @@ jobs:
     steps:
       - checkout
       - mvnw/circle:
-          command: install
+          command: -B install
       - persist_to_workspace:
           root: /tmp/workspace
           paths: ['*', '**/*']
@@ -25,7 +25,7 @@ jobs:
       - persist_to_workspace:
           root: /tmp/workspace
           paths: ['*', '**/*']
-  publish-staging:
+  snapshot:
     docker:
       - image: circleci/openjdk:11.0
     working_directory: /tmp/workspace
@@ -42,7 +42,7 @@ jobs:
       - run: rm /tmp/key
       - run: sudo ln -s $(which gpg) /usr/local/bin/gpg2
       - mvnw/circle:
-          command: -pl '!src/validator' package gpg:sign nexus-staging:deploy
+          command: -B -pl '!src/validator' package gpg:sign nexus-staging:deploy
   release:
     docker:
       - image: circleci/openjdk:11.0
@@ -60,7 +60,7 @@ jobs:
       - run: rm /tmp/key
       - run: sudo ln -s $(which gpg) /usr/local/bin/gpg2
       - mvnw/circle:
-          command: -pl '!src/validator' package gpg:sign nexus-staging:deploy nexus-staging:release
+          command: -B -pl '!src/validator' package gpg:sign nexus-staging:deploy nexus-staging:release
 
 workflows:
   version: '2.1'
@@ -76,17 +76,20 @@ workflows:
           filters:
             tags:
               only: /.*/
-      - publish-staging:
+      - snapshot:
           requires:
             - build
             - validate-allure
           context: sonatype.org
           filters:
+            branches:
+              only: /release\/.*/
             tags:
               only: /.*/
       - release:
           requires:
-            - publish-staging
+            - build
+            - validate-allure
           context: sonatype.org
           filters:
             branches:
