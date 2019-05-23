@@ -85,7 +85,7 @@ workflows:
             branches:
               only: /release\/.*/
             tags:
-              only: /.*/
+              ignore: /.*/
       - release:
           requires:
             - build
