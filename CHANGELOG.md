@@ -4,10 +4,19 @@ All notable changes to this project will be documented in this file.
 The format is based on [Keep a Changelog](https://keepachangelog.com/en/1.0.0/),
 and this project adheres to [Semantic Versioning](https://semver.org/spec/v2.0.0.html).
 
+## [0.2.5] - 24-05-2019
+### Added
+
+- Moditect plugin support
+
+### Changed
+
+- Lombok dependency bumped to 1.18.8
+
 ## [0.2.4] - 19-03-2019
 ### Changed
 
-Removed sonar analysis branch property, reverting 0.2.3
+- Removed sonar analysis branch property, reverting 0.2.3
 
 ## [0.2.3] - 17-03-2019 - YANKED
 
