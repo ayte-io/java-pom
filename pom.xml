@@ -107,10 +107,11 @@
         <plugin.allure.version>2.9</plugin.allure.version>
         <plugin.sonar-scanner.version>3.6.0.1398</plugin.sonar-scanner.version>
         <plugin.git-commit-id.version>2.2.6</plugin.git-commit-id.version>
+        <plugin.moditect.version>1.0.0.Beta2</plugin.moditect.version>
 
         <plugin.jxr.version>3.0.0</plugin.jxr.version>
 
-        <lombok.version>1.18.4</lombok.version>
+        <lombok.version>1.18.8</lombok.version>
 
         <junit.jupiter.version>5.3.1</junit.jupiter.version>
         <junit.platform.version>1.2.0</junit.platform.version>
@@ -408,6 +409,12 @@
                             </goals>
                         </execution>
                     </executions>
+                </plugin>
+
+                <plugin>
+                    <groupId>org.moditect</groupId>
+                    <artifactId>moditect-maven-plugin</artifactId>
+                    <version>${plugin.moditect.version}</version>
                 </plugin>
             </plugins>
         </pluginManagement>
